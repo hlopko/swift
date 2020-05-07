@@ -9,3 +9,7 @@ module MemoryLayout {
 module MemberVariables {
   header "member-variables.h"
 }
+
+module Inheritance {
+  header "inheritance.h"
+}
