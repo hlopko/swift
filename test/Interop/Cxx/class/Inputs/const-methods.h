@@ -1,0 +1,9 @@
+#ifndef TEST_INTEROP_CXX_CLASS_INPUTS_CONST_METHODS_H
+#define TEST_INTEROP_CXX_CLASS_INPUTS_CONST_METHODS_H
+
+class Banana {
+public:
+  int constMethod() const { return 86; }
+};
+
+#endif // TEST_INTEROP_CXX_CLASS_INPUTS_CONST_METHODS_H
