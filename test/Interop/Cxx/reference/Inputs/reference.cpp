@@ -1,12 +1,14 @@
 #include "reference.h"
 
+#include <utility>
+
 static int staticInt = 42;
 
 int getStaticInt() { return staticInt; }
 int &getStaticIntRef() { return staticInt; }
-int &&getStaticIntRvalueRef() { return static_cast<int &&>(staticInt); }
+int &&getStaticIntRvalueRef() { return std::move(staticInt); }
 const int &getConstStaticIntRef() { return staticInt; }
-const int &&getConstStaticIntRvalueRef() { return static_cast<int &&>(staticInt); }
+const int &&getConstStaticIntRvalueRef() { return std::move(staticInt); }
 
 void setStaticInt(int i) { staticInt = i; }
 void setStaticIntRef(int &i) { staticInt = i; }
