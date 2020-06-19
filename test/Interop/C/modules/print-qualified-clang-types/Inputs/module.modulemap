@@ -1,7 +1,11 @@
 module ForeignA {
-  header "foreign-a.h"
+  module Sub {
+    header "foreign-a.h"
+  }
 }
 
 module ForeignB {
-  header "foreign-b.h"
+  module Sub {
+    header "foreign-b.h"
+  }
 }

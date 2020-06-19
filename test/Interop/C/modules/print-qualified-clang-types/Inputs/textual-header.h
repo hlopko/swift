@@ -1,1 +1,1 @@
-struct ForeignStruct {};
+struct ForeignStruct{};
