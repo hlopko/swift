@@ -547,7 +547,7 @@ struct PrintOptions {
   /// attributes.
   ///
   /// \see swift::emitSwiftInterface
-  static PrintOptions printSwiftInterfaceFile(ModuleDecl *M,
+  static PrintOptions printSwiftInterfaceFile(ModuleDecl *ModuleToPrint,
                                               bool preferTypeRepr,
                                               bool printFullConvention,
                                               bool printSPIs);
