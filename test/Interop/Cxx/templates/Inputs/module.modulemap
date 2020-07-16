@@ -29,3 +29,7 @@ module UsingDirective {
 module SfinaeDoesNotCompile {
   header "sfinae-does-not-compile.h"
 }
+
+module EagerInstantiationProblems {
+  header "eager-instantiation-problems.h"
+}
