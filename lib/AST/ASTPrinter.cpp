@@ -3681,6 +3681,7 @@ class TypePrinter : public TypeVisitor<TypePrinter> {
     // For the current module, consider both private and public imports.
     ModuleDecl::ImportFilter Filter = ModuleDecl::ImportFilterKind::Public;
     Filter |= ModuleDecl::ImportFilterKind::Private;
+    Filter |= ModuleDecl::ImportFilterKind::SPIAccessControl;
     SmallVector<ModuleDecl::ImportedModule, 4> Imports;
     Options.CurrentModule->getImportedModules(Imports, Filter);
 
