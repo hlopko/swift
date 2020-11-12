@@ -1745,6 +1745,7 @@ static Type
 findGenericTypeInGenericDecls(const clang::TemplateTypeParmType *templateParam,
                               ArrayRef<GenericTypeParamDecl *> genericParams) {
   StringRef name = templateParam->getIdentifier()->getName();
+  llvm::dbgs() << name << "\n";
   auto genericParamIter =
       llvm::find_if(genericParams, [name](GenericTypeParamDecl *generic) {
         return generic->getName().str() == name;
