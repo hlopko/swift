@@ -1,3 +1,4 @@
 module UseString {
   header "use-string.h"
+  export std.string
 }

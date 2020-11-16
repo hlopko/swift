@@ -3560,7 +3560,7 @@ namespace {
               Impl.getClangASTContext().getRecordType(decl))) {
         // If we got nullptr definition now it means the type is not complete.
         // We don't import incomplete types.
-        // return nullptr;
+        return nullptr;
       }
       auto def = dyn_cast<clang::ClassTemplateSpecializationDecl>(
           decl->getDefinition());
@@ -8904,6 +8904,13 @@ ClangImporter::Implementation::loadAllMembers(Decl *D, uint64_t extra) {
           }
         }
 
+        if (auto methodDecl = dyn_cast<clang::CXXMethodDecl>(nd)) {
+          // CXXMethodDecl directly inside a namespace without definition -> must be template specialization definition.
+          if (!methodDecl->isThisDeclarationADefinition()) {
+            continue;
+          }
+        }
+
         if (!hasMember(enumDecl, member)) {
           enumDecl->addMember(member);
         }
@@ -8911,8 +8918,6 @@ ClangImporter::Implementation::loadAllMembers(Decl *D, uint64_t extra) {
     }
     return;
   }
-  llvm::errs() << "DONE LOADING NAMESPACE\n";
-  D->dump();
   loadAllMembersIntoExtension(D, extra);
 }
 
