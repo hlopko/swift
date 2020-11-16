@@ -3362,6 +3362,12 @@ namespace {
           }
         }
 
+        if (auto record = dyn_cast<clang::CXXRecordDecl>(nd)) {
+          if (record->isInjectedClassName()) {
+            continue;
+          }
+        }
+
         auto member = Impl.importDecl(nd, getActiveSwiftVersion());
         if (!member) {
           if (!isa<clang::TypeDecl>(nd) && !isa<clang::FunctionDecl>(nd)) {
@@ -3554,7 +3560,7 @@ namespace {
               Impl.getClangASTContext().getRecordType(decl))) {
         // If we got nullptr definition now it means the type is not complete.
         // We don't import incomplete types.
-        return nullptr;
+        // return nullptr;
       }
       auto def = dyn_cast<clang::ClassTemplateSpecializationDecl>(
           decl->getDefinition());
@@ -3877,6 +3883,10 @@ namespace {
         // type), bail.
         if (!bodyParams)
           return nullptr;
+
+        if (!bodyParams) {
+          return nullptr;
+        }
 
         importedType =
             Impl.importFunctionReturnType(dc, decl, allowNSUIntegerAsInt);
@@ -8846,6 +8856,15 @@ static void loadAllMembersOfSuperclassIfNeeded(ClassDecl *CD) {
     E->loadAllMembers();
 }
 
+bool hasMember(EnumDecl *D, Decl *M) {
+  for (auto existingMember : D->getMembers()) {
+    if (existingMember == M) {
+      return true;
+    }
+  }
+  return false;
+}
+
 void
 ClangImporter::Implementation::loadAllMembers(Decl *D, uint64_t extra) {
 
@@ -8879,12 +8898,21 @@ ClangImporter::Implementation::loadAllMembers(Decl *D, uint64_t extra) {
         if (!member)
           continue;
 
-        enumDecl->addMember(member);
+        if (auto varDecl = dyn_cast<clang::VarDecl>(nd)) {
+          if (varDecl->isThisDeclarationADefinition()) {
+            continue;
+          }
+        }
+
+        if (!hasMember(enumDecl, member)) {
+          enumDecl->addMember(member);
+        }
       }
     }
     return;
   }
-
+  llvm::errs() << "DONE LOADING NAMESPACE\n";
+  D->dump();
   loadAllMembersIntoExtension(D, extra);
 }
 

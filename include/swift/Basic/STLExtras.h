@@ -492,7 +492,7 @@ public:
 
   OptionalTransformRange(Range range, OptionalTransform op)
     : First(range.begin()), Last(range.end()), Op(op) 
-  { 
+  {
     // Prime the sequence.
     while (First != Last && !Op(*First))
       ++First;
