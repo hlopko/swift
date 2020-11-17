@@ -8894,22 +8894,17 @@ ClangImporter::Implementation::loadAllMembers(Decl *D, uint64_t extra) {
         auto nd = dyn_cast<clang::NamedDecl>(m);
         if (!nd)
           continue;
-        if (nd->getDeclName().isIdentifier()) {
-          llvm::errs() << nd->getDeclName() << "\n";
-          if (nd->getDeclName().getAsString() == "__libcpp_allocate") {
-            auto f = dyn_cast<clang::FunctionDecl>(nd);
-            llvm::errs() << "YOHOOOOOO" << f << "\n";
-          }
-        }
-        if (nd != nd->getCanonicalDecl()) {
-          continue;
-        }
+
         auto member = importDecl(nd, CurrentVersion);
         if (!member)
           continue;
 
+        if (nd != nd->getCanonicalDecl()) {
+          // Let's only import each decl only once.
+          continue;
+        }
         if (member->getDeclContext() != enumDecl) {
-          llvm::errs() << nd->getDeclName() << "\n";
+          // This means the decl was an explicit definition in the namespace-level for a decl from a struct/template.
           continue;
         }
 

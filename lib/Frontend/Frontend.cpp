@@ -37,6 +37,7 @@
 #include "swift/Strings.h"
 #include "swift/Subsystems.h"
 #include "clang/AST/ASTContext.h"
+#include "clang/Sema/Sema.h"
 #include "llvm/ADT/Hashing.h"
 #include "llvm/ADT/SmallVector.h"
 #include "llvm/ADT/Triple.h"
@@ -968,6 +969,7 @@ void CompilerInstance::performSema() {
   });
 
   finishTypeChecking();
+  Context->getClangModuleLoader()->getClangSema().ActOnEndOfTranslationUnit();
 }
 
 bool CompilerInstance::loadStdlibIfNeeded() {
