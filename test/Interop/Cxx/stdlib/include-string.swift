@@ -1,10 +1,12 @@
-// RUN: %target-swift-frontend -emit-module -o %t/FortyTwo.swiftmodule \
-// RUN:   -I %S/Inputs -enable-cxx-interop -Xcc -stdlib=libc++ \
-// R UN    -Xcc -nostdinc++ \
+// RUN: %target-run-simple-swift(-I %S/Inputs -Xfrontend -enable-cxx-interop \
+// RUN:   -Xcc -stdlib=libc++ \
+// RUN    -Xcc -nostdinc++ \
 // RUN:   -I /usr/local/google/home/hlopko/tmp/llvm/include/c++/v1 \
-// RUN:   %s
-// REQUIRES libc++
-// REQUIRES executable_test
+// RUN:   -L/usr/local/google/home/hlopko/tmp/llvm/lib \
+// RUN:   -lc++ -lc++abi -lm -lc -lgcc_s -lgcc \
+// RUN:   )
+// R EQUIRES: libc++
+// REQUIRES: executable_test
 import UseString
 import StdlibUnittest
 
@@ -12,7 +14,7 @@ var StdStringTestSuite = TestSuite("std::string")
 
 StdStringTestSuite.test("return-string") {
   var s = Foo.returnString()
-  expectEqual(13, s.size())
+  expectEqual(42, s.size())
 }
 
 runAllTests()

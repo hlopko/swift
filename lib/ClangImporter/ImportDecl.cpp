@@ -8894,41 +8894,28 @@ ClangImporter::Implementation::loadAllMembers(Decl *D, uint64_t extra) {
         auto nd = dyn_cast<clang::NamedDecl>(m);
         if (!nd)
           continue;
+        if (nd->getDeclName().isIdentifier()) {
+          llvm::errs() << nd->getDeclName() << "\n";
+          if (nd->getDeclName().getAsString() == "__libcpp_allocate") {
+            auto f = dyn_cast<clang::FunctionDecl>(nd);
+            llvm::errs() << "YOHOOOOOO" << f << "\n";
+          }
+        }
+        if (nd != nd->getCanonicalDecl()) {
+          continue;
+        }
         auto member = importDecl(nd, CurrentVersion);
         if (!member)
           continue;
 
-        if (nd->getDeclContext()->isDependentContext()) {
-          llvm::errs() << nd->getName() << "\n";
-        }
-
-        if (nd->getDeclContext() != nd->getCanonicalDecl()->getDeclContext()) {
-          llvm::errs() << nd->getName() << "\n";
-        }
-
         if (member->getDeclContext() != enumDecl) {
+          llvm::errs() << nd->getDeclName() << "\n";
           continue;
         }
 
-
-        if (auto methodDecl = dyn_cast<clang::CXXMethodDecl>(nd)) {
-          // CXXMethodDecl directly inside a namespace without definition -> must be template specialization definition.
-            continue;
-        }
-
-        if (auto funcDecl = dyn_cast<clang::FunctionTemplateDecl>(nd)) {
-          if (funcDecl->isThisDeclarationADefinition()) {
-            continue;
-          }
-        }
-
-        if (auto constructorDecl = dyn_cast<clang::CXXConstructorDecl>(nd)) {
-            continue;
-        }
-
-        if (!hasMember(enumDecl, member)) {
+        // if (!hasMember(enumDecl, member)) {
           enumDecl->addMember(member);
-        }
+        // }
       }
     }
     return;
