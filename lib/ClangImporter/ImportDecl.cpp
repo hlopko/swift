@@ -8898,17 +8898,32 @@ ClangImporter::Implementation::loadAllMembers(Decl *D, uint64_t extra) {
         if (!member)
           continue;
 
-        if (auto varDecl = dyn_cast<clang::VarDecl>(nd)) {
-          if (varDecl->isThisDeclarationADefinition()) {
+        if (nd->getDeclContext()->isDependentContext()) {
+          llvm::errs() << nd->getName() << "\n";
+        }
+
+        if (nd->getDeclContext() != nd->getCanonicalDecl()->getDeclContext()) {
+          llvm::errs() << nd->getName() << "\n";
+        }
+
+        if (member->getDeclContext() != enumDecl) {
+          continue;
+        }
+
+
+        if (auto methodDecl = dyn_cast<clang::CXXMethodDecl>(nd)) {
+          // CXXMethodDecl directly inside a namespace without definition -> must be template specialization definition.
+            continue;
+        }
+
+        if (auto funcDecl = dyn_cast<clang::FunctionTemplateDecl>(nd)) {
+          if (funcDecl->isThisDeclarationADefinition()) {
             continue;
           }
         }
 
-        if (auto methodDecl = dyn_cast<clang::CXXMethodDecl>(nd)) {
-          // CXXMethodDecl directly inside a namespace without definition -> must be template specialization definition.
-          if (!methodDecl->isThisDeclarationADefinition()) {
+        if (auto constructorDecl = dyn_cast<clang::CXXConstructorDecl>(nd)) {
             continue;
-          }
         }
 
         if (!hasMember(enumDecl, member)) {

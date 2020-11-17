@@ -1,16 +1,18 @@
 // RUN: %target-swift-frontend -emit-module -o %t/FortyTwo.swiftmodule \
-// RUN:   -I %S/Inputs -enable-cxx-interop \
-// RU N    -Xcc -stdlib=libc++ -Xcc \
-// RU N:   -isystem/usr/local/google/home/hlopko/tmp/llvm/include/c++/v1 \
-// RU N:   -Xcc -sysroot/usr/local/google/home/hlopko/tmp/llvm \
-// RUN:   -Xcc -std=c++17 %s
-// REQUIR E libc++
+// RUN:   -I %S/Inputs -enable-cxx-interop -Xcc -stdlib=libc++ \
+// R UN    -Xcc -nostdinc++ \
+// RUN:   -I /usr/local/google/home/hlopko/tmp/llvm/include/c++/v1 \
+// RUN:   %s
+// REQUIRES libc++
+// REQUIRES executable_test
 import UseString
+import StdlibUnittest
 
-public func foo() {
+var StdStringTestSuite = TestSuite("std::string")
+
+StdStringTestSuite.test("return-string") {
   var s = Foo.returnString()
-  // var dep = yolo.YohoDep()
-  // yolo.useTemplateType(dep)
-  // print(nested.getOne())
-  print(s.size())
+  expectEqual(13, s.size())
 }
+
+runAllTests()
