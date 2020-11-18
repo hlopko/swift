@@ -7,6 +7,6 @@ public func callAdd3(_ n: CInt) -> CInt {
   return add3(n)
 }
 
-public func callGetFoo() -> CInt {
-  return getFoo()
+public func callGetMyIntValue() -> CInt {
+  return getMyIntValue()
 }

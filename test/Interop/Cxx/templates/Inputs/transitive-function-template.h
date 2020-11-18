@@ -19,7 +19,7 @@ inline T add3(T t) {
 template<typename T>
 struct Wrapper {
   T& wrapee;
-  basic_string(T&& t) : wrapee(myStdForward(t)) {}
+  Wrapper(T&& t) : wrapee(myStdForward(t)) {}
 };
 
 template<typename T>
@@ -33,4 +33,4 @@ struct MyInt {
 
 inline int getMyIntValue() { return Wrapper<MyInt>(MyInt()).wrapee.value; }
 
-// #endif // TEST_INTEROP_CXX_TEMPLATES_INPUTS_TRANSITIVE_FUNCTION_TEMPLATE_H
+#endif // TEST_INTEROP_CXX_TEMPLATES_INPUTS_TRANSITIVE_FUNCTION_TEMPLATE_H

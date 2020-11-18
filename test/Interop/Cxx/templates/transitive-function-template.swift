@@ -12,7 +12,7 @@ TemplatesTestSuite.test("transitive-function-template") {
 }
 
 TemplatesTestSuite.test("transitive-function-constructor") {
-  expectEqual(42, getFoo())
+  expectEqual(42, getMyIntValue())
 }
 
 runAllTests()
