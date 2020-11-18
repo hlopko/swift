@@ -17,20 +17,20 @@ inline T add3(T t) {
 }
 
 template<typename T>
-struct basic_string {
-  T& _t;
-  basic_string(T&& t) : _t(forward(t)) {}
+struct Wrapper {
+  T& wrapee;
+  basic_string(T&& t) : wrapee(myStdForward(t)) {}
 };
 
 template<typename T>
-inline T&& forward(T&& param) {
-    return static_cast<T&&>(param);
+inline T&& myStdForward(T&& param) {
+  return static_cast<T&&>(param);
 }
 
-struct Foo {
-  int a = 42;
+struct MyInt {
+  int value = 42;
 };
 
-inline int getFoo() { return basic_string<Foo>(Foo())._t.a; }
+inline int getMyIntValue() { return Wrapper<MyInt>(MyInt()).wrapee.value; }
 
-#endif // TEST_INTEROP_CXX_TEMPLATES_INPUTS_TRANSITIVE_FUNCTION_TEMPLATE_H
+// #endif // TEST_INTEROP_CXX_TEMPLATES_INPUTS_TRANSITIVE_FUNCTION_TEMPLATE_H
