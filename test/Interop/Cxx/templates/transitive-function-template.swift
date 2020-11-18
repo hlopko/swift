@@ -11,4 +11,8 @@ TemplatesTestSuite.test("transitive-function-template") {
   expectEqual(9, add3(6))
 }
 
+TemplatesTestSuite.test("transitive-function-constructor") {
+  expectEqual(42, getFoo())
+}
+
 runAllTests()
